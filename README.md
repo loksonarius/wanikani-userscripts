@@ -1,4 +1,4 @@
-# wanikani-userscripts
+# WaniKani Userscripts
 
 _Userscripts to augment functionality in the WaniKani website_
 
