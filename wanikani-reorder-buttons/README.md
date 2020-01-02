@@ -1,4 +1,4 @@
-# Reorder Buttons
+# WaniKani Reorder Buttons
 
 This script will add two buttons to the bottom of the WaniKani review page that
 will reorder your remaining reviews by their SRS order.

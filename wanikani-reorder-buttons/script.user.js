@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        WaniKani SRS Reorder Button (Fork)
+// @name        WaniKani Reorder Buttons
 // @namespace   sonarius.wk
 // @author      Sonarius
 // @description Adds button enabling item ordering by SRS level.
@@ -8,8 +8,8 @@
 //
 // @include     *://www.wanikani.com/review/session
 //
-// @updateURL   https://github.com/mwil/wanikani-userscripts/raw/master/wanikani-similar-kanji/wk_niai.user.js
-// @downloadURL https://github.com/mwil/wanikani-userscripts/raw/master/wanikani-similar-kanji/wk_niai.user.js
+// @updateURL   https://github.com/loksonarius/wanikani-userscripts/raw/master/wanikani-reorder-buttons/script.user.js
+// @downloadURL https://github.com/loksonarius/wanikani-userscripts/raw/master/wanikani-reorder-buttons/script.user.js
 // ==/UserScript==
 
 /* Settings */
