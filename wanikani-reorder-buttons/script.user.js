@@ -127,10 +127,10 @@ $(function() {
   $('footer').prepend($ascButton.click(function() { reorderBySrs(true); }));
 
   document.addEventListener('keydown', function(e) {
-    if (e.code === ascHotKey) {
+    if (e.shiftKey && e.altKey && e.code == ascHotKey) {
       reorderBySrs(true);
       e.preventDefault();
-    } else if (e.code == desHotKey) {
+    } else if (e.shiftKey && e.altKey && e.code == desHotKey) {
       reorderBySrs(false);
       e.preventDefault();
     }

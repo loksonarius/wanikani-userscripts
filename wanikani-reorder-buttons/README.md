@@ -16,8 +16,8 @@ Their original WaniKani community post can be found
 
 There are two hotkeys registered for this script:
 
-- `-`: reorder review items by SRS level in descending order
-- `=`: reorder review items by SRS level in ascending order
+- `Alt` + `Shift` + `-`: reorder review items by SRS level in descending order
+- `Alt` + `Shift` + `=`: reorder review items by SRS level in ascending order
 
 # Install
 
