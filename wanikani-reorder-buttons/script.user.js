@@ -233,6 +233,7 @@ function register_hotkeys() {
         if (e.shiftKey == asc_mod.shift &&
           e.altKey == asc_mod.alt &&
           e.ctrlKey == asc_mod.ctrl) {
+          e.preventDefault();
           sort_queue();
         }
         break;
@@ -240,14 +241,13 @@ function register_hotkeys() {
         if (e.shiftKey == des_mod.shift &&
           e.altKey == des_mod.alt &&
           e.ctrlKey == des_mod.ctrl) {
+          e.preventDefault();
           sort_queue(false);
         }
         break;
       default:
         return;
     }
-
-    e.preventDefault();
   });
 }
 
