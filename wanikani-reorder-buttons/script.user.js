@@ -376,4 +376,3 @@ function startup() {
   }
   log('ready!');
 }
-// ==/UserScript==
