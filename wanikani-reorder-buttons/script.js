@@ -21,7 +21,7 @@ if (!window.wkof) {
   return;
 }
 
-const wkof = window.wkof
+const wkof = window.wkof;
 if (!wkof.version || wkof.version.compare_to(wkof_version_needed) === 'older') {
   alert('[WaniKani Reorder Buttons] requires Wanikani Open Framework version '+wkof_version_needed+'.\nYou will now be forwarded to update page.');
   window.location.href = 'https://greasyfork.org/en/scripts/38582-wanikani-open-framework';
@@ -206,7 +206,7 @@ function open_settings() {
         }
       }
     }
-  }
+  };
   const dialog = new wkof.Settings(config);
   dialog.open();
 }
@@ -222,11 +222,11 @@ function register_hotkeys() {
       return;
     }
 
-    const settings = wkof.settings[script_settings_id]
-    const asc_key = settings.ascending_key
-    const asc_mod = settings.ascending_modifiers
-    const des_key = settings.descending_key
-    const des_mod = settings.descending_modifiers
+    const settings = wkof.settings[script_settings_id];
+    const asc_key = settings.ascending_key;
+    const asc_mod = settings.ascending_modifiers;
+    const des_key = settings.descending_key;
+    const des_mod = settings.descending_modifiers;
 
     switch (e.code) {
       case asc_key:
@@ -253,7 +253,7 @@ function register_hotkeys() {
 
 /* Sorting */
 function type_priority_of(id) {
-  const val = items_by_id[`${id}`]
+  const val = items_by_id[`${id}`];
   if (!val) {
     return -1;
   }
@@ -271,7 +271,7 @@ function type_priority_of(id) {
 }
 
 function srs_stage_for(id) {
-  const val = items_by_id[`${id}`]
+  const val = items_by_id[`${id}`];
   return !val ? -1 : val.assignments.srs_stage;
 }
 
