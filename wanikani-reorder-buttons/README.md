@@ -58,7 +58,7 @@ it](https://greasyfork.org/en/scripts/38582-wanikani-open-framework)) script
 pre-installed.
 
 Once those prerequisites are met, you can click
-[here](https://github.com/loksonarius/wanikani-userscripts/raw/master/wanikani-reorder-buttons/script.user.js)
+[here](https://github.com/loksonarius/wanikani-userscripts/raw/master/wanikani-reorder-buttons/script.js)
 to have your UserScript engine prompt you for installation. This has been tested
 to work with the [Tampermonkey](https://tampermonkey.net) userscript engine.
 
