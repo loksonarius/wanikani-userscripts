@@ -12,17 +12,18 @@ BIsTheAnswer for their help in the forums, as well as rfindley's publishing of
 the [WaniKani Open
 Framework](https://github.com/rfindley/wanikani-open-framework)!
 
-## Overview
+## Features
 
-![Buttons](ordering-buttons.png)
+### The Main Thing
 
-This script will add two buttons inside a context menu on the top right of your
-reviews page.
+![Buttons](ordering-button.png)
 
-The ordering can be either ascending or descending, though this plugin can be
-configured to automatically sort items in ascending order at start up. It is
-also possible to to make review items have their meaning and readings be asked
-in immediate succession as well.
+This script will add a sorting button to the top-left corner of the reviews
+page. The button will allow you to sort reviews in either ascending, descending,
+or a randomized order. The button's icon will update accordingly to indicate the
+current sorting mode as well.
+
+### Review Counters
 
 ![Counters](review-counters.png)
 
@@ -30,17 +31,7 @@ There is also an indicator added to the top of the page indicating the amount of
 remaining reviews for each SRS level. These will update as you answer your
 review questions.
 
-## Persistent Settings
-
-Leveraging the WaniKani Open Framework, this script integrates into the common
-menu panel like other scripts. A new menu item will be installed that opens the
-following settings panel for this plugin:
-
-![Settings](settings.png)
-
-From here you can customize hotkeys and sorting behavior in a persistent manner.
-
-## HotKeys
+### HotKeys
 
 There are two hotkeys registered by default for this script:
 
@@ -50,7 +41,59 @@ There are two hotkeys registered by default for this script:
 These are entirely customizable and toggleable within the
 [settings](#persistent-settings) panel!
 
-# Install
+### CogWheel Menu Integration
+
+Thanks to the WaniKani Open Framework, this script integrates into the common
+menu panel like other scripts. Two new menu entries will be registered to
+trigger specific sorting functions on-demand:
+
+![CogWheel Buttons](cogwheel-buttons.png)
+
+These buttons can be used if neither [hotkeys](#hotkeys) nor the [one-click
+button](#the-main-thing) are available.
+
+### Persistent Settings
+
+Leveraging the WaniKani Open Framework, this script integrates into the common
+menu panel like other scripts. A new menu item will be installed that opens the
+following settings panel for this plugin:
+
+![Settings](settings.png)
+
+From here you can customize hotkeys and sorting behavior in a persistent manner.
+
+#### Auto-Sort on Startup
+
+If every time you start reviews, you'd like them to be automatically sorted,
+this is possible by configuring it with a single checkbox. The default sorting
+on startup will be ascending, prioritizing new review items.
+
+This setting can be found under the `Sorting Behavior` section of the settings
+panel.
+
+#### Hiding the Sort Button
+
+It is possible to hide the sorting button from the UI entirely. This will
+not remove the sort buttons in the cog menu, nor will it disable the use of
+[hotkeys](#hotkeys) either.
+
+This setting can be found under the `Display Settings` section of the settings
+panel.
+
+#### 1x1 Mode
+
+When sorting reviews, it is possible to force 1x1 mode. In 1x1 mode, review
+items will be grouped such that meaning and reading question types will appear
+in immediate succession.
+
+:warning: _it should be noted that the way this is implemented may cause issues
+with other scripts on the page that rely on a functioning `Math.Random`
+function being available_ :warning:
+
+This setting can be found under the `Sorting Behavior` section of the settings
+panel.
+
+## Install
 
 Before installing this script, you'll need both a UserScript engine as well as
 the WaniKani Open Framework user ([click here to install
