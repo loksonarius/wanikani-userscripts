@@ -29,7 +29,9 @@ current sorting mode as well.
 
 There is also an indicator added to the top of the page indicating the amount of
 remaining reviews for each SRS level. These will update as you answer your
-review questions.
+review questions. If you'd rather omit the counters entirely, it is possible to
+remove them from the UI by configuring it in the [settings
+panel](#persistent-settings).
 
 ### HotKeys
 
