@@ -101,6 +101,12 @@ function install_menu() {
     title: 'Descending',
     on_click: function() { sort_queue(false); }
   });
+  wkof.Menu.insert_script_link({
+    name: script_settings_id+'_randomize',
+    submenu: 'Sort Reviews',
+    title: 'Random',
+    on_click: function() { randomize_queue(); }
+  });
 }
 
 function load_settings() {
