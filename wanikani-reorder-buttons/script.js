@@ -28,10 +28,14 @@ if (!wkof.version || wkof.version.compare_to(wkof_version_needed) === 'older') {
   return;
 }
 
+/* State */
+var current_sorting = 'random';
+
 /* Constants */
 const $ = window.$;
 const jstor = $.jStorage;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
+const true_rand = Math.random;
 
 /* Util */
 function log(s) {
@@ -102,6 +106,7 @@ function install_menu() {
 function load_settings() {
   log('loading settings...');
   const defaults = {
+    show_sort_button: true,
     sort_on_startup: false,
     item_type_order: 'rkv',
     prioritize_srs: true,
@@ -129,6 +134,17 @@ function open_settings() {
     title: 'Settings',
     on_save: update_settings,
     content: {
+      display_group: {
+        type: 'group',
+        label: 'Display Settings',
+        content: {
+          show_sort_button: {
+            type: 'checkbox',
+            label: 'Display sort button ',
+            hover_tip: 'Whether or not to display the SRS sort button.'
+          }
+        }
+      },
       sorting_group: {
         type: 'group',
         label: 'Sorting Behavior',
@@ -238,6 +254,8 @@ function open_settings() {
 }
 
 function update_settings() {
+  update_sort_button();
+
   log('settings saved!');
 }
 
@@ -332,19 +350,22 @@ function make_comparator(ascending=true) {
   return function(a,b) { return type(a,b) || srs(a,b); };
 }
 
-async function sort_queue(ascending=true) {
+function sort_queue(ascending=true) {
   log('sorting queue...');
+
+  if (ascending) {
+    current_sorting = 'ascending';
+  } else {
+    current_sorting = 'descending';
+  }
+  update_sort_button();
+
   const queue = jstor.get('activeQueue')
     .map(i => i.id)
     .concat(jstor.get('reviewQueue'));
 
   queue.sort(make_comparator(ascending));
-
-  const active_queue_items = await fetch_review_items(queue.slice(0,10));
-  const active_queue = queue.slice(0,10).map(x => active_queue_items.find(i => i.id == x));
-  jstor.set('activeQueue', active_queue);
-  jstor.set('reviewQueue', queue.slice(10).reverse());
-  jstor.set('currentItem', active_queue[0]);
+  set_reviews(queue);
 
   // this was inherited from previous script version -- no clue how nor why it
   // works, but I did miss not having it around, so I'm bringing it back as an
@@ -356,6 +377,92 @@ async function sort_queue(ascending=true) {
       Math.random = function() { return 0; };
     }
   }
+}
+
+function randomize_queue() {
+  log('shuffling queue...');
+
+  current_sorting = 'random';
+  update_sort_button();
+
+  const queue = jstor.get('activeQueue')
+    .map(i => i.id)
+    .concat(jstor.get('reviewQueue'));
+
+  const shuffled = queue
+    .map((value) => ({ value, sort: true_rand() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+  set_reviews(shuffled);
+
+  // ensure we undo 1x1 mode in case it's set
+  try {
+    unsafeWindow.Math.random = true_rand;
+  } catch (e) {
+    Math.random = true_rand;
+  }
+}
+
+async function set_reviews(queue) {
+  const active_queue_items = await fetch_review_items(queue.slice(0,10));
+  const active_queue = queue.slice(0,10).map(x => active_queue_items.find(i => i.id == x));
+  jstor.set('activeQueue', active_queue);
+  jstor.set('reviewQueue', queue.slice(10).reverse());
+  jstor.set('currentItem', active_queue[0]);
+}
+
+/* Sort Button */
+function update_sort_button() {
+  const icon = $('#sort-icon')
+  switch (current_sorting) {
+    case 'random':
+      icon.addClass('fa-sort');
+      icon.removeClass('fa-sort-asc');
+      icon.removeClass('fa-sort-desc');
+      break;
+    case 'ascending':
+      icon.removeClass('fa-sort');
+      icon.addClass('fa-sort-asc');
+      icon.removeClass('fa-sort-desc');
+      break;
+    case 'descending':
+      icon.removeClass('fa-sort');
+      icon.removeClass('fa-sort-asc');
+      icon.addClass('fa-sort-desc');
+      break;
+    default:
+      log('unknown sorting order to use -- defaulting to ascending...');
+      icon.addClass('fa-sort');
+      icon.removeClass('fa-sort-asc');
+      icon.removeClass('fa-sort-desc');
+  }
+
+  const settings = wkof.settings[script_settings_id];
+  $('#sort-btn').prop('hidden', !settings.show_sort_button);
+}
+
+function sort_clicked() {
+  switch (current_sorting) {
+    case 'random':
+      sort_queue();
+      break;
+    case 'ascending':
+      sort_queue(false);
+      break;
+    case 'descending':
+      randomize_queue();
+      break;
+    default:
+      log('unknown sorting order to use -- defaulting to ascending...');
+      sort_queue();
+      return;
+  }
+}
+
+function register_sort_button() {
+  $('#summary-button').append('<a id="sort-btn" href="#" hidden ><i id="sort-icon" class="fa fa-sort" title="SRS Level Sort - reorder the current review sorting by SRS level."></i></a>');
+  $('#sort-btn').on('click', sort_clicked);
+  update_sort_button();
 }
 
 /* Counters */
@@ -393,6 +500,7 @@ wkof.ready('Menu,Settings,ItemData')
   .then(load_settings)
   .then(load_assignments, report_err('failed to load settings'))
   .then(register_hotkeys)
+  .then(register_sort_button)
   .then(register_counters)
   .then(startup);
 
