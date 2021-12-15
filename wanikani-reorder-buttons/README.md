@@ -67,8 +67,9 @@ From here you can customize hotkeys and sorting behavior in a persistent manner.
 #### Auto-Sort on Startup
 
 If every time you start reviews, you'd like them to be automatically sorted,
-this is possible by configuring it with a single checkbox. The default sorting
-on startup will be ascending, prioritizing new review items.
+this is possible by configuring a sort order to use on startup. By default,
+there will be no startup sorting done. Users may choose to have their reviews
+automatically sorted in ascending or descending order.
 
 This setting can be found under the `Sorting` section of the settings panel.
 
