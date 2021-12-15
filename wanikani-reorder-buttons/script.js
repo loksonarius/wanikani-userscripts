@@ -34,6 +34,24 @@ const jstor = $.jStorage;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
 
 /* Util */
+function log(s) {
+  console.log(`[Reorder Buttons] ${s}`);
+}
+
+function report_err(s) {
+  return function(err) {
+    // save to javascript logs for detailed user error-reporting
+    log(s);
+    log(`error: ${err}`);
+    // alert on error if configured to do so
+    const settings = wkof.settings[script_settings_id];
+    const alert_on_error = settings.alert_on_error;
+    if (alert_on_error) {
+      alert(`[Reorder Buttons] Encountered error during operation: ${s}`);
+    }
+  };
+}
+
 async function fetch_review_items(subject_ids) {
   // ideally, we'd only rely on documented endpoints, but there doesn't seem to
   // be any documented item in the API matching what's returned by this endpoint
@@ -41,11 +59,7 @@ async function fetch_review_items(subject_ids) {
   return await fetch(`/review/items?ids=${subject_ids_str}`)
     .then(function(resp) {
       return resp.json();
-    });
-}
-
-function log(s) {
-  console.log(`[Reorder Buttons] ${s}`);
+    }, report_err('failed to fetch review items'));
 }
 
 /* Lookup Data */
@@ -59,7 +73,7 @@ async function load_assignments() {
   await wkof.ItemData.get_items('assignments', config)
     .then(function(items) {
       items_by_id = wkof.ItemData.get_index(items, 'subject_id');
-    });
+    }, report_err('failed to fetch assignments'));
 }
 
 /* Settings */
@@ -104,6 +118,7 @@ function load_settings() {
       alt: true,
       shift: true
     },
+    alert_on_error: false,
   };
   return wkof.Settings.load(script_settings_id, defaults);
 }
@@ -202,6 +217,17 @@ function open_settings() {
                 }
               },
             }
+          }
+        }
+      },
+      debug_group: {
+        type: 'group',
+        label: 'Debug Options',
+        content: {
+          alert_on_error: {
+            type: 'checkbox',
+            label: 'Alert on Error',
+            hover_tip: 'Enables browser alerts whenever an error is detected.'
           }
         }
       }
@@ -365,7 +391,7 @@ wkof.include('Menu,Settings,ItemData');
 wkof.ready('Menu,Settings,ItemData')
   .then(install_menu)
   .then(load_settings)
-  .then(load_assignments)
+  .then(load_assignments, report_err('failed to load settings'))
   .then(register_hotkeys)
   .then(register_counters)
   .then(startup);
