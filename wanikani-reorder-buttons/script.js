@@ -112,7 +112,7 @@ function install_menu() {
 function load_settings() {
   log('loading settings...');
   const defaults = {
-    sort_on_startup: false,
+    startup_sort_order: 'none',
     item_type_order: 'rkv',
     prioritize_srs: true,
     force1x1: false,
@@ -157,6 +157,16 @@ function open_settings() {
                 type: 'checkbox',
                 label: 'Sort on Startup',
                 hover_tip: 'Enables auto-sorting of reviews upon loading.'
+              },
+              startup_sort_order: {
+                type: 'dropdown',
+                label: 'Startup Sort Ordering to Use',
+                hover_tip: 'Determines order to use on during startup sort. None disables startup sort entirely.',
+                content: {
+                  none: "None",
+                  ascending: "Ascending",
+                  descending: "Descending"
+                }
               },
 
               general_section: {
@@ -561,8 +571,21 @@ wkof.ready('Menu,Settings,ItemData')
   .then(startup);
 
 function startup() {
-  if (wkof.settings[script_settings_id].sort_on_startup) {
-    sort_queue();
+  const settings = wkof.settings[script_settings_id];
+  switch (settings.startup_sort_order) {
+    case 'ascending':
+      sort_queue();
+      break;
+    case 'descending':
+      sort_queue(false);
+      break;
+    case 'none':
+      // no-op
+      break;
+    default:
+      log(`invalid startup sort order set: ${settings.startup_sort_order}`);
+      break;
   }
+
   log('ready!');
 }
