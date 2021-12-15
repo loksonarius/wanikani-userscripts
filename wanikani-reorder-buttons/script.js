@@ -163,9 +163,9 @@ function open_settings() {
                 label: 'Startup Sort Ordering to Use',
                 hover_tip: 'Determines order to use on during startup sort. None disables startup sort entirely.',
                 content: {
-                  none: "None",
-                  ascending: "Ascending",
-                  descending: "Descending"
+                  none: 'None',
+                  ascending: 'Ascending',
+                  descending: 'Descending'
                 }
               },
 
@@ -178,9 +178,9 @@ function open_settings() {
                 label: 'Item-Type Ordering',
                 hover_tip: 'Determines ordering between radicals, kanji, and vocabulary.',
                 content: {
-                  rkv: "Radical -> Kanji -> Vocabulary",
-                  vkr: "Vocabulary -> Kanji -> Radical",
-                  ran: "Random"
+                  rkv: 'Radical -> Kanji -> Vocabulary',
+                  vkr: 'Vocabulary -> Kanji -> Radical',
+                  ran: 'Random'
                 }
               },
               prioritize_srs: {
@@ -220,9 +220,9 @@ function open_settings() {
                 hover_tip: 'Modifier keys that must be pressed along activation key.',
                 multi: true,
                 content: {
-                  ctrl: "Control",
-                  alt: "Alt",
-                  shift: "Shift",
+                  ctrl: 'Control',
+                  alt: 'Alt',
+                  shift: 'Shift',
                 }
               },
 
@@ -246,9 +246,9 @@ function open_settings() {
                 hover_tip: 'Modifier keys that must be pressed along activation key.',
                 multi: true,
                 content: {
-                  ctrl: "Control",
-                  alt: "Alt",
-                  shift: "Shift",
+                  ctrl: 'Control',
+                  alt: 'Alt',
+                  shift: 'Shift',
                 }
               },
             }
