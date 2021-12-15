@@ -36,6 +36,9 @@ const $ = window.$;
 const jstor = $.jStorage;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
 const true_rand = Math.random;
+const button_id = 'wk-reorderbuttons-sort-btn';
+const icon_id = 'wk-reorderbuttons-sort-icon';
+const counters_id = 'wk-reorderbuttons-sort-counters';
 
 /* Util */
 function log(s) {
@@ -476,7 +479,7 @@ async function set_reviews(queue) {
 
 /* Sort Button */
 function update_sort_button() {
-  const icon = $('#sort-icon')
+  const icon = $(`#${icon_id}`)
   switch (current_sorting) {
     case 'random':
       icon.addClass('fa-sort');
@@ -501,7 +504,7 @@ function update_sort_button() {
   }
 
   const settings = wkof.settings[script_settings_id];
-  $('#sort-btn').prop('hidden', !settings.show_sort_button);
+  $(`#${button_id}`).prop('hidden', !settings.show_sort_button);
 }
 
 function sort_clicked() {
@@ -523,8 +526,8 @@ function sort_clicked() {
 }
 
 function register_sort_button() {
-  $('#summary-button').append('<a id="sort-btn" href="#" hidden ><i id="sort-icon" class="fa fa-sort" title="SRS Level Sort - reorder the current review sorting by SRS level."></i></a>');
-  $('#sort-btn').on('click', sort_clicked);
+  $('#summary-button').append(`<a id="${button_id}" href="#" hidden ><i id="${icon_id}" class="fa fa-sort" title="SRS Level Sort - reorder the current review sorting by SRS level."></i></a>`);
+  $(`#${button_id}`).on('click', sort_clicked);
   update_sort_button();
 }
 
@@ -544,7 +547,7 @@ function render_counters() {
     ++items_per_srs[srs_stage_for(i)-1];
   });
 
-  const $counters = $('<div id="srs-counters" style="background-color:rgba(255,255,255,0.9);border-radius:8px;color:black;font-weight:bold;margin-top:5px;text-shadow:none"></div>');
+  const $counters = $(`<div id="${counters_id}" style="background-color:rgba(255,255,255,0.9);border-radius:8px;color:black;font-weight:bold;margin-top:5px;text-shadow:none"></div>`);
   for (let srs = 1; srs <= items_per_srs.length; ++srs) {
     const color = srs < 5 ? 'DD0093' : srs < 7 ? '882D9E' : srs < 8 ? '294DDB' : '0093DD';
     if (srs > 1) {
@@ -555,7 +558,7 @@ function render_counters() {
 
   const settings = wkof.settings[script_settings_id];
   $counters.prop('hidden', !settings.show_srs_counters);
-  $('#srs-counters').remove();
+  $(`#${counters_id}`).remove();
   $('div#stats').append($counters);
 }
 
