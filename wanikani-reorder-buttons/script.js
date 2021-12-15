@@ -112,7 +112,6 @@ function install_menu() {
 function load_settings() {
   log('loading settings...');
   const defaults = {
-    show_sort_button: true,
     sort_on_startup: false,
     item_type_order: 'rkv',
     prioritize_srs: true,
@@ -129,6 +128,8 @@ function load_settings() {
       alt: true,
       shift: true
     },
+    show_sort_button: true,
+    show_srs_counters: true,
     alert_on_error: false,
   };
   return wkof.Settings.load(script_settings_id, defaults);
@@ -251,6 +252,12 @@ function open_settings() {
                 type: 'checkbox',
                 label: 'Display sort button ',
                 hover_tip: 'Whether or not to display the SRS sort button.'
+              },
+
+              show_srs_counters: {
+                type: 'checkbox',
+                label: 'Display SRS counters ',
+                hover_tip: 'Whether or not to display the SRS item counters.'
               }
             }
           },
@@ -300,6 +307,7 @@ function open_settings() {
 
 function update_settings() {
   update_sort_button();
+  render_counters();
 
   log('settings saved!');
 }
@@ -512,11 +520,11 @@ function register_sort_button() {
 
 /* Counters */
 function register_counters() {
-  show_counters();
-  jstor.listenKeyChange('currentItem', show_counters);
+  render_counters();
+  jstor.listenKeyChange('currentItem', render_counters);
 }
 
-function show_counters() {
+function render_counters() {
   const queue = jstor.get('activeQueue')
     .map(i => i.id)
     .concat(jstor.get('reviewQueue'));
@@ -534,6 +542,9 @@ function show_counters() {
     }
     $counters.append($('<span style="color:#' + color + ';margin:0">' + items_per_srs[srs - 1] + '</span>'));
   }
+
+  const settings = wkof.settings[script_settings_id];
+  $counters.prop('hidden', !settings.show_srs_counters);
   $('#srs-counters').remove();
   $('div#stats').append($counters);
 }
