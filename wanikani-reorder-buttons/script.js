@@ -140,56 +140,59 @@ function open_settings() {
     title: 'Settings',
     on_save: update_settings,
     content: {
-      display_group: {
-        type: 'group',
-        label: 'Display Settings',
+      tabset:{
+        type: 'tabset',
         content: {
-          show_sort_button: {
-            type: 'checkbox',
-            label: 'Display sort button ',
-            hover_tip: 'Whether or not to display the SRS sort button.'
-          }
-        }
-      },
-      sorting_group: {
-        type: 'group',
-        label: 'Sorting Behavior',
-        content: {
-          sort_on_startup: {
-            type: 'checkbox',
-            label: 'Sort on Startup',
-            hover_tip: 'Enables auto-sorting of reviews upon loading.'
-          },
-          item_type_order: {
-            type: 'dropdown',
-            label: 'Item-Type Ordering',
-            hover_tip: 'Determines ordering between radicals, kanji, and vocabulary.',
+
+          sorting_page: {
+            type: 'page',
+            label: 'Sorting',
             content: {
-              rkv: "Radical -> Kanji -> Vocabulary",
-              vkr: "Vocabulary -> Kanji -> Radical",
-              ran: "Random"
+              startup_section: {
+                type: 'section',
+                label: 'Startup'
+              },
+              sort_on_startup: {
+                type: 'checkbox',
+                label: 'Sort on Startup',
+                hover_tip: 'Enables auto-sorting of reviews upon loading.'
+              },
+
+              general_section: {
+                type: 'section',
+                label: 'General'
+              },
+              item_type_order: {
+                type: 'dropdown',
+                label: 'Item-Type Ordering',
+                hover_tip: 'Determines ordering between radicals, kanji, and vocabulary.',
+                content: {
+                  rkv: "Radical -> Kanji -> Vocabulary",
+                  vkr: "Vocabulary -> Kanji -> Radical",
+                  ran: "Random"
+                }
+              },
+              prioritize_srs: {
+                type: 'checkbox',
+                label: 'Prioritize SRS',
+                hover_tip: 'Sort by SRS level before sorting by item type.'
+              },
+              force1x1: {
+                type: 'checkbox',
+                label: 'Force 1x1',
+                hover_tip: 'Force meaning and reading questions to be in succession.'
+              }
             }
           },
-          prioritize_srs: {
-            type: 'checkbox',
-            label: 'Prioritize SRS',
-            hover_tip: 'Sort by SRS level before sorting by item type.'
-          },
-          force1x1: {
-            type: 'checkbox',
-            label: 'Force 1x1',
-            hover_tip: 'Force meaning and reading questions to be in succession.'
-          },
-        }
-      },
-      keycombo_group: {
-        type: 'group',
-        label: 'Hotkeys',
-        content: {
-          ascending_group: {
-            type: 'group',
-            label: 'Ascending Sort Hotkeys',
+
+          hotkey_page: {
+            type: 'page',
+            label: 'HotKeys',
             content: {
+              ascending_section: {
+                type: 'section',
+                label: 'Sort Ascending',
+              },
               ascending_key: {
                 type: 'text',
                 label: 'Activation Key Event Code',
@@ -211,12 +214,11 @@ function open_settings() {
                   shift: "Shift",
                 }
               },
-            }
-          },
-          descending_group: {
-            type: 'group',
-            label: 'Descending Sort Hotkey',
-            content: {
+
+              descending_section: {
+                type: 'section',
+                label: 'Sort Descending',
+              },
               descending_key: {
                 type: 'text',
                 label: 'Activation Key Event Code',
@@ -239,20 +241,57 @@ function open_settings() {
                 }
               },
             }
+          },
+
+          display_page: {
+            type: 'page',
+            label: 'Display',
+            content: {
+              show_sort_button: {
+                type: 'checkbox',
+                label: 'Display sort button ',
+                hover_tip: 'Whether or not to display the SRS sort button.'
+              }
+            }
+          },
+
+          debug_page: {
+            type: 'page',
+            label: 'Help',
+            content: {
+              contact_section: {
+                type: 'section',
+                label: 'Contact Us'
+              },
+              contact_html: {
+                type: 'html',
+                html: '<p>If you\'d like to contact us regarding feature requests or questions, please try any of the following:</p><ul><li><a href="https://community.wanikani.com/t/userscript-reorder-buttons/41133">WaniKani Community Forum thread for this plugin</a></li><li><a href="https://github.com/loksonarius/wanikani-userscripts">Our GitHub repo</a></li></ul>'
+              },
+
+              bugs_section: {
+                type: 'section',
+                label: 'Reporting Bugs'
+              },
+              bugs_html: {
+                type: 'html',
+                html: '<p>If you intend on reporting a bug or some unexpected behavior, please help us by referencing <a href="https://github.com/loksonarius/wanikani-userscripts/blob/master/BUGS.md">bug report guide</a>. It will contain some basic diagnostic steps and questions we will need answers to before helping!</p>'
+              },
+
+              debug_section: {
+                type: 'section',
+                label: 'Debug'
+              },
+              alert_on_error: {
+                type: 'checkbox',
+                label: 'Alert on Error',
+                hover_tip: 'Enables browser alerts whenever an error is detected.'
+              },
+
+            }
           }
+
         }
       },
-      debug_group: {
-        type: 'group',
-        label: 'Debug Options',
-        content: {
-          alert_on_error: {
-            type: 'checkbox',
-            label: 'Alert on Error',
-            hover_tip: 'Enables browser alerts whenever an error is detected.'
-          }
-        }
-      }
     }
   };
   const dialog = new wkof.Settings(config);

@@ -68,8 +68,7 @@ If every time you start reviews, you'd like them to be automatically sorted,
 this is possible by configuring it with a single checkbox. The default sorting
 on startup will be ascending, prioritizing new review items.
 
-This setting can be found under the `Sorting Behavior` section of the settings
-panel.
+This setting can be found under the `Sorting` section of the settings panel.
 
 #### Hiding the Sort Button
 
@@ -77,8 +76,7 @@ It is possible to hide the sorting button from the UI entirely. This will
 not remove the sort buttons in the cog menu, nor will it disable the use of
 [hotkeys](#hotkeys) either.
 
-This setting can be found under the `Display Settings` section of the settings
-panel.
+This setting can be found under the `Display` section of the settings panel.
 
 #### 1x1 Mode
 
@@ -90,8 +88,7 @@ in immediate succession.
 with other scripts on the page that rely on a functioning `Math.Random`
 function being available_ :warning:
 
-This setting can be found under the `Sorting Behavior` section of the settings
-panel.
+This setting can be found under the `Sorting` section of the settings panel.
 
 ## Install
 
