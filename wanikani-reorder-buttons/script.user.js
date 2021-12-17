@@ -70,7 +70,7 @@ async function fetch_review_items(subject_ids) {
 }
 
 /* Lookup Data */
-let items_by_id = {};
+var items_by_id = {};
 async function load_assignments() {
   log('prepping lookup data...');
   const config = { wk_items: { filters: { srs: {
