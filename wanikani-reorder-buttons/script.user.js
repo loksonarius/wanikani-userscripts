@@ -4,7 +4,7 @@
 // @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/master/wanikani-reorder-buttons
 // @author      Sonarius
 // @description Adds button enabling item ordering by SRS level.
-// @version     3.0.0
+// @version     3.1.0
 // @grant       none
 //
 // @include     *://www.wanikani.com/review/session
