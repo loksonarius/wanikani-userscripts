@@ -34,6 +34,7 @@ var current_sorting = 'random';
 /* Constants */
 const $ = window.$;
 const jstor = $.jStorage;
+const wkcm_enabled = window.WaniKani.wanikani_compatibility_mode;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
 const true_rand = Math.random;
 const button_id = 'wk-reorderbuttons-sort-btn';
@@ -69,6 +70,13 @@ async function fetch_review_items(subject_ids) {
     }, report_err('failed to fetch review items'));
 }
 
+function get_queue() {
+  return jstor.get('activeQueue')
+    .map(i => i.id)
+    // if we're in compatibility mode, we'll need to rip out ids
+    .concat(jstor.get('reviewQueue').map(i => wkcm_enabled ? i.id : i));
+}
+
 /* Lookup Data */
 var items_by_id = {};
 async function load_assignments() {
@@ -81,6 +89,26 @@ async function load_assignments() {
     .then(function(items) {
       items_by_id = wkof.ItemData.get_index(items, 'subject_id');
     }, report_err('failed to fetch assignments'));
+}
+
+var review_structs = [];
+async function cache_review_structs() {
+  // this should only ever run if we're in compatibility mode -- the data cached
+  // by this isn't meant to stick around going forward
+  if (!wkcm_enabled) {
+    return;
+  }
+
+  log('caching review item data...');
+  // this isn't really meant for permanent use, but it'll be the easiest way of
+  // getting full review item structs in one go
+  await fetch('/review/queue')
+    .then(function(resp) {
+      resp.json().then(
+        function(data) {
+          review_structs = data;
+        }, report_err('failed to parse review queue data'));
+    }, report_err('failed to fetch review queue data'));
 }
 
 /* Settings */
@@ -433,10 +461,7 @@ function sort_queue(ascending=true) {
   }
   update_sort_button();
 
-  const queue = jstor.get('activeQueue')
-    .map(i => i.id)
-    .concat(jstor.get('reviewQueue'));
-
+  const queue = get_queue();
   queue.sort(make_comparator(ascending));
   set_reviews(queue);
 }
@@ -447,11 +472,7 @@ function randomize_queue() {
   current_sorting = 'random';
   update_sort_button();
 
-  const queue = jstor.get('activeQueue')
-    .map(i => i.id)
-    .concat(jstor.get('reviewQueue'));
-
-  const shuffled = queue
+  const shuffled = get_queue()
     .map((value) => ({ value, sort: true_rand() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
@@ -462,7 +483,10 @@ async function set_reviews(queue) {
   const active_queue_items = await fetch_review_items(queue.slice(0,10));
   const active_queue = queue.slice(0,10).map(x => active_queue_items.find(i => i.id == x));
   jstor.set('activeQueue', active_queue);
-  jstor.set('reviewQueue', queue.slice(10).reverse());
+
+  const review_queue = queue.slice(10).reverse().map(x => wkcm_enabled ? review_structs.find(i => i.id == x) : x);
+  jstor.set('reviewQueue', review_queue);
+
   jstor.set('currentItem', active_queue[0]);
 }
 
@@ -601,10 +625,7 @@ function register_counters() {
 }
 
 function render_counters() {
-  const queue = jstor.get('activeQueue')
-    .map(i => i.id)
-    .concat(jstor.get('reviewQueue'));
-
+  const queue = get_queue();
   const items_per_srs = [0, 0, 0, 0, 0, 0, 0, 0];
   queue.forEach(function(i) {
     ++items_per_srs[srs_stage_for(i)-1];
@@ -631,6 +652,7 @@ wkof.ready('Menu,Settings,ItemData')
   .then(install_menu)
   .then(load_settings)
   .then(load_assignments, report_err('failed to load settings'))
+  .then(cache_review_structs)
   .then(register_hotkeys)
   .then(register_sort_button)
   .then(register_type_sorter)
