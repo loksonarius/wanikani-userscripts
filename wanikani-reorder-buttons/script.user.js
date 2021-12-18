@@ -157,11 +157,6 @@ function open_settings() {
                 type: 'section',
                 label: 'Startup'
               },
-              sort_on_startup: {
-                type: 'checkbox',
-                label: 'Sort on Startup',
-                hover_tip: 'Enables auto-sorting of reviews upon loading.'
-              },
               startup_sort_order: {
                 type: 'dropdown',
                 label: 'Startup Sort Ordering to Use',
