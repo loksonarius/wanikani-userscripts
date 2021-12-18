@@ -119,6 +119,7 @@ function load_settings() {
     item_type_order: 'rkv',
     prioritize_srs: true,
     force1x1: false,
+    question_type_order: 'random',
     ascending_key: 'Equal',
     ascending_modifiers: {
       ctrl: false,
@@ -184,6 +185,16 @@ function open_settings() {
                   rkv: 'Radical -> Kanji -> Vocabulary',
                   vkr: 'Vocabulary -> Kanji -> Radical',
                   ran: 'Random'
+                }
+              },
+              question_type_order: {
+                type: 'dropdown',
+                label: 'Question-Type Ordering',
+                hover_tip: 'Determines whether readings, meanings, or any will be asked first.',
+                content: {
+                  reading: 'Reading -> Meaning',
+                  meaning: 'Meaning -> Reading',
+                  random: 'Random'
                 }
               },
               prioritize_srs: {
@@ -361,7 +372,7 @@ function register_hotkeys() {
   });
 }
 
-/* Sorting */
+/* Item Sorting */
 function type_priority_of(id) {
   const val = items_by_id[`${id}`];
   if (!val) {
@@ -477,6 +488,56 @@ async function set_reviews(queue) {
   jstor.set('currentItem', active_queue[0]);
 }
 
+/* Type Sorting */
+function register_type_sorter() {
+  order_question_type();
+  jstor.listenKeyChange('currentItem', order_question_type);
+}
+
+function order_question_type() {
+  const current_item = jstor.get('currentItem');
+  if (current_item.type == 'Radical') {
+    // there's nothing to really try sorting for radicals
+    return;
+  }
+
+  const settings = wkof.settings[script_settings_id];
+  const requested_order = settings.question_type_order;
+  if (requested_order == 'random') {
+    // nothing to worry about here
+    return;
+  }
+
+  const item_type = current_item.type == 'Kanji' ? 'k' : 'v';
+  const uid = item_type + current_item.id;
+  const data = jstor.get(uid);
+  if (data && (data.rc || data.mc)) {
+    // there is some record of this being answered correctly previously so we
+    // really just want to let WK have the user answer the second question type
+    return;
+  }
+
+  // code below this point assumes there's either no data, or only data
+  // indicating wrong answers, so we'll force some question type as requested
+  switch (requested_order) {
+    case 'reading':
+    case 'meaning':
+      const current_type = jstor.get('questionType');
+      if (current_type != requested_order) {
+        log('reordering question type...');
+
+        jstor.set('questionType', requested_order)
+        jstor.set('currentItem', current_item)
+      }
+      break;
+    case 'random':
+      break;
+    default:
+      log(`invalid question type order set: ${requested_order}`);
+      log('user should try updating their preferences in the settings panel');
+  }
+}
+
 /* Sort Button */
 function update_sort_button() {
   const icon = $(`#${icon_id}`)
@@ -570,6 +631,7 @@ wkof.ready('Menu,Settings,ItemData')
   .then(load_assignments, report_err('failed to load settings'))
   .then(register_hotkeys)
   .then(register_sort_button)
+  .then(register_type_sorter)
   .then(register_counters)
   .then(startup);
 
