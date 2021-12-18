@@ -332,6 +332,7 @@ function open_settings() {
 function update_settings() {
   update_sort_button();
   render_counters();
+  process_1x1_setting();
 
   log('settings saved!');
 }
@@ -443,17 +444,6 @@ function sort_queue(ascending=true) {
 
   queue.sort(make_comparator(ascending));
   set_reviews(queue);
-
-  // this was inherited from previous script version -- no clue how nor why it
-  // works, but I did miss not having it around, so I'm bringing it back as an
-  // opt-in option
-  if (wkof.settings[script_settings_id].force1x1) {
-    try {
-      unsafeWindow.Math.random = function() { return 0; };
-    } catch (e) {
-      Math.random = function() { return 0; };
-    }
-  }
 }
 
 function randomize_queue() {
@@ -471,13 +461,6 @@ function randomize_queue() {
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
   set_reviews(shuffled);
-
-  // ensure we undo 1x1 mode in case it's set
-  try {
-    unsafeWindow.Math.random = true_rand;
-  } catch (e) {
-    Math.random = true_rand;
-  }
 }
 
 async function set_reviews(queue) {
@@ -535,6 +518,30 @@ function order_question_type() {
     default:
       log(`invalid question type order set: ${requested_order}`);
       log('user should try updating their preferences in the settings panel');
+  }
+}
+
+/* 1x1 Mode */
+function process_1x1_setting() {
+  const settings = wkof.settings[script_settings_id];
+  const force1x1 = settings.force1x1;
+  if (force1x1) {
+    // this was inherited from previous script version -- no clue how nor why it
+    // works, but I did miss not having it around, so I'm bringing it back as an
+    // opt-in option
+    if (wkof.settings[script_settings_id].force1x1) {
+      try {
+        unsafeWindow.Math.random = function() { return 0; };
+      } catch (e) {
+        Math.random = function() { return 0; };
+      }
+    }
+  } else {
+    try {
+      unsafeWindow.Math.random = true_rand;
+    } catch (e) {
+      Math.random = true_rand;
+    }
   }
 }
 
@@ -632,6 +639,7 @@ wkof.ready('Menu,Settings,ItemData')
   .then(register_hotkeys)
   .then(register_sort_button)
   .then(register_type_sorter)
+  .then(process_1x1_setting)
   .then(register_counters)
   .then(startup);
 
