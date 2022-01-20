@@ -40,9 +40,23 @@ const true_rand = Math.random;
 const button_id = 'wk-reorderbuttons-sort-btn';
 const icon_id = 'wk-reorderbuttons-sort-icon';
 const counters_id = 'wk-reorderbuttons-sort-counters';
+const logs = [];
 
 /* Util */
+function prompt_download(name, content) {
+  const bb = new Blob(content, { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.download = name;
+  a.href = window.URL.createObjectURL(bb);
+  a.textContent = 'Download ready';
+  a.style='display:none';
+  a.click();
+  a.remove();
+}
+
 function log(s) {
+  const time = new Date(Date.now());
+  logs.push(`[${time}] ${s}\n`);
   console.log(`[Reorder Buttons] ${s}`);
 }
 
@@ -340,6 +354,15 @@ function open_settings() {
                 label: 'Alert on Error',
                 hover_tip: 'Enables browser alerts whenever an error is detected.'
               },
+              download_logs: {
+                type: 'button',
+                label: 'Save extension logs to file',
+                text: 'Download Logs',
+                hover_tip: 'Downloads all local logs for this script to a local file.',
+                on_click: function(name, config, on_change) {
+                  prompt_download(`${script_settings_id}.log`, logs);
+                }
+              }
 
             }
           }
