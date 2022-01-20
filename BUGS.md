@@ -30,16 +30,33 @@ Below is a sample screenshot for reference:
 
 ![Example TamperMonkey Screencap](tampermonkey-dashboard.png)
 
-## Javascript Console Logs
+## Userscript Logs
 
 The userscripts here are programmed to log helpful information during operation.
-This information is anonymous and generally just dummy statements meant to help
-with tracing execution of code for debugging.
+Some include the ability to download their logs for the last session. This
+information is anonymous and generally just dummy statements meant to help with
+tracing execution of code for debugging. If the userscript supports it, these
+logs can be downloaded as a single file. Check the settings menu for the script
+for a `Help` tab that includes a `Download Logs` button. (example below)
 
-This output can be found in your browser's Javascript console after the script
-has been started. It may be helpful to include logs along with your bug report
-in the form of a copy-pasted block of formatted text or as a screenshot of the
-entries if they are short enough.
+![Example Logs Download Button](download-logs-button.png)
+
+The logs stored are only stored locally and get wiped whenever the reviews page
+is closed or reloaded. The log file downloaded should be included with any bug
+reports -- especially those that involve the reviews page breaking!
+
+## Javascript Console Logs
+
+While the userscripts here keep their own logs, they do not intercept logs from
+the browser or other scripts, not even errors or warning messages. Because of
+this, any interactions between multiple userscripts or between a single
+userscript and the browser or engine cannot be captured in [downloaded
+logs](#userscript-logs).
+
+If possible, it is helpful to include a screenshot or text-copy of any entries
+in your Javascript console that are present when a bug occurs. This is
+incredibly important information if reporting bugs that may involve multiple
+userscripts or browser issues.
 
 If you do not know how to access the Javascript console for your browser, please
 reference [this StackOverflow
