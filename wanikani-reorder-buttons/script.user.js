@@ -526,7 +526,13 @@ async function set_reviews(queue) {
 
 /* Type Sorting */
 function register_type_sorter() {
-  jstor.listenKeyChange('currentItem', order_question_type);
+  const wrapping_func = function(key, action) {
+    jstor.stopListening('currentItem', wrapping_func);
+    order_question_type();
+    jstor.listenKeyChange('currentItem', wrapping_func);
+  };
+
+  jstor.listenKeyChange('currentItem', wrapping_func);
 }
 
 function order_question_type() {
