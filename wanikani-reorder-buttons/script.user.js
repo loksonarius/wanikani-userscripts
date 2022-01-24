@@ -110,6 +110,7 @@ async function cache_review_structs() {
   // this should only ever run if we're in compatibility mode -- the data cached
   // by this isn't meant to stick around going forward
   if (!wkcm_enabled) {
+    log('not caching review item data due to disabled compatibility mode...');
     return;
   }
 
@@ -123,11 +124,11 @@ async function cache_review_structs() {
           review_structs = data;
         }, report_err('failed to parse review queue data'));
     }, report_err('failed to fetch review queue data'));
+  log('review item data cached!');
 }
 
 /* Settings */
 function install_menu() {
-  log('installing menu...');
   wkof.Menu.insert_script_link({
     name: script_settings_id+'_settings',
     submenu: 'Settings',
@@ -178,10 +179,12 @@ function load_settings() {
     show_srs_counters: true,
     alert_on_error: false,
   };
+  log('settings loaded!');
   return wkof.Settings.load(script_settings_id, defaults);
 }
 
 function open_settings() {
+  log('opening settings panel...');
   const config = {
     script_id: script_settings_id,
     title: 'Settings',
@@ -373,9 +376,12 @@ function open_settings() {
   };
   const dialog = new wkof.Settings(config);
   dialog.open();
+  log('settings panel opened!');
 }
 
 function update_settings() {
+  log('saving new settings...');
+
   update_sort_button();
   render_counters();
   process_1x1_setting();
@@ -487,6 +493,7 @@ function sort_queue(ascending=true) {
   const queue = get_queue();
   queue.sort(make_comparator(ascending));
   set_reviews(queue);
+  log(`sorted queues in ${current_sorting} order!`);
 }
 
 function randomize_queue() {
@@ -500,9 +507,12 @@ function randomize_queue() {
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
   set_reviews(shuffled);
+  log('shuffled queues!');
 }
 
 async function set_reviews(queue) {
+  log('setting review and active queues...');
+
   const active_queue_items = await fetch_review_items(queue.slice(0,10));
   const active_queue = queue.slice(0,10).map(x => active_queue_items.find(i => i.id == x));
   jstor.set('activeQueue', active_queue);
@@ -511,6 +521,7 @@ async function set_reviews(queue) {
   jstor.set('reviewQueue', review_queue);
 
   jstor.set('currentItem', active_queue[0]);
+  log('set queues!');
 }
 
 /* Type Sorting */
@@ -521,6 +532,7 @@ function register_type_sorter() {
 function order_question_type() {
   const current_item = jstor.get('currentItem');
   if (current_item.type == 'Radical') {
+    log('radical item encountered, correcting sort question type...');
     // there's nothing to really try sorting for radicals, though we should
     // ensure the question type is at least accurate for them
     jstor.set('questionType', 'meaning')
@@ -532,6 +544,7 @@ function order_question_type() {
   const requested_order = settings.question_type_order;
   if (requested_order == 'random') {
     // nothing to worry about here
+    log('random question type order requested, skipping...');
     return;
   }
 
@@ -539,6 +552,7 @@ function order_question_type() {
   const uid = item_type + current_item.id;
   const data = jstor.get(uid);
   if (data && (data.rc || data.mc)) {
+    log('previous question answer given, refusing to reorder question type...');
     // there is some record of this being answered correctly previously so we
     // really just want to let WK have the user answer the second question type
     return;
@@ -555,9 +569,12 @@ function order_question_type() {
 
         jstor.set('questionType', requested_order)
         jstor.set('currentItem', current_item)
+      } else {
+        log('question type already matches requested order, skipping...');
       }
       break;
     case 'random':
+      // shouldn't hit this case
       break;
     default:
       log(`invalid question type order set: ${requested_order}`);
@@ -686,6 +703,7 @@ wkof.ready('Menu,Settings,ItemData')
   .then(startup);
 
 function startup() {
+  log('running startup...');
   const settings = wkof.settings[script_settings_id];
   switch (settings.startup_sort_order) {
     case 'ascending':
@@ -702,5 +720,5 @@ function startup() {
       break;
   }
 
-  log('ready!');
+  log('startup completed!');
 }
