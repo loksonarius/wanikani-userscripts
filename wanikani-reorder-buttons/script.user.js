@@ -515,14 +515,16 @@ async function set_reviews(queue) {
 
 /* Type Sorting */
 function register_type_sorter() {
-  order_question_type();
   jstor.listenKeyChange('currentItem', order_question_type);
 }
 
 function order_question_type() {
   const current_item = jstor.get('currentItem');
   if (current_item.type == 'Radical') {
-    // there's nothing to really try sorting for radicals
+    // there's nothing to really try sorting for radicals, though we should
+    // ensure the question type is at least accurate for them
+    jstor.set('questionType', 'meaning')
+    jstor.set('currentItem', current_item)
     return;
   }
 
