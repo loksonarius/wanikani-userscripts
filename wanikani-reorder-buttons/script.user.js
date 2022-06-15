@@ -517,7 +517,7 @@ async function set_reviews(queue) {
   const active_queue = queue.slice(0,10).map(x => active_queue_items.find(i => i.id == x));
   jstor.set('activeQueue', active_queue);
 
-  const review_queue = queue.slice(10).reverse().map(x => wkcm_enabled ? review_structs.find(i => i.id == x) : x);
+  const review_queue = queue.slice(10).map(x => wkcm_enabled ? review_structs.find(i => i.id == x) : x);
   jstor.set('reviewQueue', review_queue);
 
   jstor.set('currentItem', active_queue[0]);
