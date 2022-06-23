@@ -7,10 +7,18 @@ This script started is a modified copy of Towe's
 [WaniKani SRS Reorder Button](https://greasyfork.org/en/scripts/29673-wanikani-srs-reorder-button).
 Their original WaniKani community post can be found
 [here](https://community.wanikani.com/t/wanikani-srs-reorder-button/17880). Most
-of the credit for this script goes to them! Major thanks as well to rfindley and
-BIsTheAnswer for their help in the forums, as well as rfindley's publishing of
-the [WaniKani Open
+of the credit for this script goes to them! Major credit goes to rfindley aswell
+for their work maintaining the [WaniKani Open
 Framework](https://github.com/rfindley/wanikani-open-framework)!
+
+## Special Thanks
+
+Below is a list of WK users I'd like to thank for helping maintain this
+userscript with their technical insight!
+
+- rfindley
+- BIsTheAnswer
+- Kumirei
 
 ## Features
 
@@ -80,18 +88,6 @@ not remove the sort buttons in the cog menu, nor will it disable the use of
 [hotkeys](#hotkeys) either.
 
 This setting can be found under the `Display` section of the settings panel.
-
-#### 1x1 Mode
-
-When sorting reviews, it is possible to force 1x1 mode. In 1x1 mode, review
-items will be grouped such that meaning and reading question types will appear
-in immediate succession.
-
-:warning: _it should be noted that the way this is implemented may cause issues
-with other scripts on the page that rely on a functioning `Math.Random`
-function being available_ :warning:
-
-This setting can be found under the `Sorting` section of the settings panel.
 
 ## Install
 
