@@ -38,7 +38,6 @@ const jstor = $.jStorage;
 const jstorage_options = {b2b_ignore: true};
 const wkcm_enabled = window.WaniKani.wanikani_compatibility_mode;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
-const true_rand = Math.random;
 const button_id = 'wk-reorderbuttons-sort-btn';
 const icon_id = 'wk-reorderbuttons-sort-icon';
 const counters_id = 'wk-reorderbuttons-sort-counters';
@@ -163,7 +162,6 @@ function load_settings() {
     startup_sort_order: 'none',
     item_type_order: 'rkv',
     prioritize_srs: true,
-    force1x1: false,
     question_type_order: 'random',
     ascending_key: 'Equal',
     ascending_modifiers: {
@@ -243,11 +241,6 @@ function open_settings() {
                 type: 'checkbox',
                 label: 'Prioritize SRS',
                 hover_tip: 'Sort by SRS level before sorting by item type.'
-              },
-              force1x1: {
-                type: 'checkbox',
-                label: 'Force 1x1',
-                hover_tip: 'Force meaning and reading questions to be in succession.'
               }
             }
           },
@@ -386,7 +379,6 @@ function update_settings() {
 
   update_sort_button();
   render_counters();
-  process_1x1_setting();
 
   log('settings saved!');
 }
@@ -505,7 +497,7 @@ function randomize_queue() {
   update_sort_button();
 
   const shuffled = get_queue()
-    .map((value) => ({ value, sort: true_rand() }))
+    .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
   set_reviews(shuffled);
@@ -587,30 +579,6 @@ function order_question_type() {
     default:
       log(`invalid question type order set: ${requested_order}`);
       log('user should try updating their preferences in the settings panel');
-  }
-}
-
-/* 1x1 Mode */
-function process_1x1_setting() {
-  const settings = wkof.settings[script_settings_id];
-  const force1x1 = settings.force1x1;
-  if (force1x1) {
-    // this was inherited from previous script version -- no clue how nor why it
-    // works, but I did miss not having it around, so I'm bringing it back as an
-    // opt-in option
-    if (wkof.settings[script_settings_id].force1x1) {
-      try {
-        unsafeWindow.Math.random = function() { return 0; };
-      } catch (e) {
-        Math.random = function() { return 0; };
-      }
-    }
-  } else {
-    try {
-      unsafeWindow.Math.random = true_rand;
-    } catch (e) {
-      Math.random = true_rand;
-    }
   }
 }
 
@@ -706,7 +674,6 @@ wkof.ready('Menu,Settings,ItemData')
   .then(register_hotkeys)
   .then(register_sort_button)
   .then(register_type_sorter)
-  .then(process_1x1_setting)
   .then(register_counters)
   .then(startup);
 
