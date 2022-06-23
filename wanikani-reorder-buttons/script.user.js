@@ -34,6 +34,8 @@ var current_sorting = 'random';
 /* Constants */
 const $ = window.$;
 const jstor = $.jStorage;
+// these options enable compatibility with other userscripts like Back2Back
+const jstorage_options = {b2b_ignore: true};
 const wkcm_enabled = window.WaniKani.wanikani_compatibility_mode;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
 const true_rand = Math.random;
@@ -515,12 +517,12 @@ async function set_reviews(queue) {
 
   const active_queue_items = await fetch_review_items(queue.slice(0,10));
   const active_queue = queue.slice(0,10).map(x => active_queue_items.find(i => i.id == x));
-  jstor.set('activeQueue', active_queue);
+  jstor.set('activeQueue', active_queue, jstorage_options);
 
   const review_queue = queue.slice(10).map(x => wkcm_enabled ? review_structs.find(i => i.id == x) : x);
-  jstor.set('reviewQueue', review_queue);
+  jstor.set('reviewQueue', review_queue, jstorage_options);
 
-  jstor.set('currentItem', active_queue[0]);
+  jstor.set('currentItem', active_queue[0], jstorage_options);
   log('set queues!');
 }
 
@@ -541,8 +543,8 @@ function order_question_type() {
     log('radical item encountered, correcting sort question type...');
     // there's nothing to really try sorting for radicals, though we should
     // ensure the question type is at least accurate for them
-    jstor.set('questionType', 'meaning')
-    jstor.set('currentItem', current_item)
+    jstor.set('questionType', 'meaning', jstorage_options)
+    jstor.set('currentItem', current_item, jstorage_options)
     return;
   }
 
@@ -573,8 +575,8 @@ function order_question_type() {
       if (current_type != requested_order) {
         log('reordering question type...');
 
-        jstor.set('questionType', requested_order)
-        jstor.set('currentItem', current_item)
+        jstor.set('questionType', requested_order, jstorage_options)
+        jstor.set('currentItem', current_item, jstorage_options)
       } else {
         log('question type already matches requested order, skipping...');
       }
