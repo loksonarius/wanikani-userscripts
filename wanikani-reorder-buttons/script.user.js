@@ -40,7 +40,6 @@ const wkcm_enabled = window.WaniKani.wanikani_compatibility_mode;
 const script_settings_id = 'sonarius_wk_reorderbuttons';
 const button_id = 'wk-reorderbuttons-sort-btn';
 const icon_id = 'wk-reorderbuttons-sort-icon';
-const counters_id = 'wk-reorderbuttons-sort-counters';
 const logs = [];
 
 /* Util */
@@ -176,7 +175,6 @@ function load_settings() {
       shift: true
     },
     show_sort_button: true,
-    show_srs_counters: true,
     alert_on_error: false,
   };
   log('settings loaded!');
@@ -311,12 +309,6 @@ function open_settings() {
                 type: 'checkbox',
                 label: 'Display sort button ',
                 hover_tip: 'Whether or not to display the SRS sort button.'
-              },
-
-              show_srs_counters: {
-                type: 'checkbox',
-                label: 'Display SRS counters ',
-                hover_tip: 'Whether or not to display the SRS item counters.'
               }
             }
           },
@@ -378,7 +370,6 @@ function update_settings() {
   log('saving new settings...');
 
   update_sort_button();
-  render_counters();
 
   log('settings saved!');
 }
@@ -636,34 +627,6 @@ function register_sort_button() {
   update_sort_button();
 }
 
-/* Counters */
-function register_counters() {
-  render_counters();
-  jstor.listenKeyChange('currentItem', render_counters);
-}
-
-function render_counters() {
-  const queue = get_queue();
-  const items_per_srs = [0, 0, 0, 0, 0, 0, 0, 0];
-  queue.forEach(function(i) {
-    ++items_per_srs[srs_stage_for(i)-1];
-  });
-
-  const $counters = $(`<div id="${counters_id}" style="background-color:rgba(255,255,255,0.9);border-radius:8px;color:black;font-weight:bold;margin-top:5px;text-shadow:none"></div>`);
-  for (let srs = 1; srs <= items_per_srs.length; ++srs) {
-    const color = srs < 5 ? 'DD0093' : srs < 7 ? '882D9E' : srs < 8 ? '294DDB' : '0093DD';
-    if (srs > 1) {
-      $counters.append(', ');
-    }
-    $counters.append($('<span style="color:#' + color + ';margin:0">' + items_per_srs[srs - 1] + '</span>'));
-  }
-
-  const settings = wkof.settings[script_settings_id];
-  $counters.prop('hidden', !settings.show_srs_counters);
-  $(`#${counters_id}`).remove();
-  $('div#stats').append($counters);
-}
-
 /* Initialization */
 wkof.include('Menu,Settings,ItemData');
 wkof.ready('Menu,Settings,ItemData')
@@ -674,7 +637,6 @@ wkof.ready('Menu,Settings,ItemData')
   .then(register_hotkeys)
   .then(register_sort_button)
   .then(register_type_sorter)
-  .then(register_counters)
   .then(startup);
 
 function startup() {
