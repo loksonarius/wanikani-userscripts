@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        WaniKani SRS Counters
 // @namespace   sonarius.wk
-// @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/master/wanikani-srs-counters
+// @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/main/wanikani-srs-counters
 // @author      Sonarius
 // @description Adds UI element to track review counts per SRS level.
 // @version     1.0.0
@@ -9,8 +9,8 @@
 //
 // @include     *://www.wanikani.com/review/session
 //
-// @updateURL   https://github.com/loksonarius/wanikani-userscripts/raw/master/wanikani-srs-counters/script.user.js
-// @downloadURL https://github.com/loksonarius/wanikani-userscripts/raw/master/wanikani-srs-counters/script.user.js
+// @updateURL   https://github.com/loksonarius/wanikani-userscripts/raw/main/wanikani-srs-counters/script.user.js
+// @downloadURL https://github.com/loksonarius/wanikani-userscripts/raw/main/wanikani-srs-counters/script.user.js
 // ==/UserScript==
 
 /* Dependency Checking */
@@ -194,7 +194,7 @@ function open_settings() {
               },
               bugs_html: {
                 type: 'html',
-                html: '<p>If you intend on reporting a bug or some unexpected behavior, please help us by referencing <a href="https://github.com/loksonarius/wanikani-userscripts/blob/master/BUGS.md">bug report guide</a>. It will contain some basic diagnostic steps and questions we will need answers to before helping!</p>'
+                html: '<p>If you intend on reporting a bug or some unexpected behavior, please help us by referencing <a href="https://github.com/loksonarius/wanikani-userscripts/blob/main/BUGS.md">bug report guide</a>. It will contain some basic diagnostic steps and questions we will need answers to before helping!</p>'
               },
 
               debug_section: {
