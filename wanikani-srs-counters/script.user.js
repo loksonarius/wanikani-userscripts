@@ -4,7 +4,7 @@
 // @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/main/wanikani-srs-counters
 // @author      Sonarius
 // @description Adds UI element to track review counts per SRS level.
-// @version     1.0.0
+// @version     1.0.1
 // @grant       none
 //
 // @include     *://www.wanikani.com/review/session
