@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Local WaniKani Reorder Buttons
 // @namespace   sonarius.wk
-// @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/master/wanikani-reorder-buttons
+// @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/main/wanikani-reorder-buttons
 // @author      Sonarius
 // @description Adds button enabling item ordering by SRS level.
 // @version     0.0.1
