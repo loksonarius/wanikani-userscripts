@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        WaniKani SRS Counters
 // @namespace   sonarius.wk
-// @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/master/wanikani-srs-counters
+// @homepage    https://github.com/loksonarius/wanikani-userscripts/tree/main/wanikani-srs-counters
 // @author      Sonarius
 // @description Adds UI element to track review counts per SRS level.
 // @version     1.0.0
